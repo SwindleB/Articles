@@ -1,10 +1,13 @@
 class ArticlesController < ApplicationController
+    http_basic_authenticate_with name: "swindle", password: "SwindleTF",
+    except: [:index, :show]
     
     def index
         @articles = Article.all
     end
     
     def new
+        @article = Article.new
     end
 
     def show 
@@ -26,9 +29,11 @@ class ArticlesController < ApplicationController
 
     def create
         @article = Article.new(article_params)
-        @article.save
+        if @article.save
         redirect_to @article
-
+        else
+            render 'new'
+        end
     end
 
     def destroy
